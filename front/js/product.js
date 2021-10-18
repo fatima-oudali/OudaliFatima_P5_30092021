@@ -30,8 +30,13 @@ let response = fetch(`http://localhost:3000/api/products/${id}`)
     const addToCart = document.getElementById("addToCart");
 
     // Evenement au clique du bouton "Ajouter au panier"
-    addToCart.addEventListener("click", (data) => {
-      addProductToCart(data);
+    addToCart.addEventListener("click", () => {
+        console.log(data);
+        console.log(data.colors);
+        data.colors = colors.value;
+        console.log(data.colors);
+        addProductToCart(data);
+        console.log(data);
     });
   });
 
