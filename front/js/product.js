@@ -1,43 +1,52 @@
 //Récupération de la chaine de requête dans l'url
 const queryString_url_id = window.location.search;
-console.log(queryString_url_id);
 
 //méthode pour extraire l'id
 const urlSearchParams = new URLSearchParams(queryString_url_id);
-console.log(urlSearchParams);
-
 const id = urlSearchParams.get("id");
-console.log(id);
 
 //Affichage du produit qui a été sélectionné par l'id
 
-let response = fetch (`http://localhost:3000/api/products/${id}`).then((res) => {
+let response = fetch(`http://localhost:3000/api/products/${id}`)
+  .then((res) => {
     return res.json();
-}).then((data)=> {
+  })
+  .then((data) => {
     console.log(data);
     document.querySelector(".item__img").innerHTML = `
-    <img src=${data.imageUrl} alt=${data.altTxt}>`
+    <img src=${data.imageUrl} alt=${data.altTxt}>`;
     document.getElementById("title").innerHTML = `
-    ${data.name}`
+    ${data.name}`;
     document.getElementById("price").innerHTML = `
-    ${data.price}`
+    ${data.price}`;
     document.getElementById("description").innerHTML = `
-    ${data.description}`
+    ${data.description}`;
     const colorSelect = document.getElementById("colors");
-    for( color of data.colors ) {
-        colorSelect.innerHTML += `
-        <option value=${color}>${color}</option>`
+    for (color of data.colors) {
+      colorSelect.innerHTML += `
+        <option value=${color}>${color}</option>`;
     }
-});
+    //Bouton "Ajouter au panier"
+    const addToCart = document.getElementById("addToCart");
 
-// --------La gestion du panier ------------------
-// La récupération des données sélectionnées par l'utilisateur et envoie du panier
+    // Evenement au clique du bouton "Ajouter au panier"
+    addToCart.addEventListener("click", (data) => {
+      addProductToCart(data);
+    });
+  });
 
-//Sélection de l'id du formulaire
-
-
-
-
-
-
-
+//La fonction qui gère l'ajout au panier
+const addProductToCart = (product) => {
+  jsonCart = localStorage.getItem("cart");
+  if (jsonCart == null) {
+    let cartItems = []; //Panier
+    cartItems.push(product); //Ajout du produit sélectionné au tableau (panier)
+    jsonCart = JSON.stringify(cartItems); //convertir le tableau en json afin de pouvoir l'insérer dans le localStorage
+    localStorage.setItem("cart", jsonCart);
+  } else {
+    cartItems = JSON.parse(jsonCart);
+    cartItems.push(product);
+    jsonCart = JSON.stringify(cartItems);
+    localStorage.setItem("cart", jsonCart);
+  }
+};
