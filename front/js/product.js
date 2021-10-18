@@ -49,8 +49,8 @@ const addProductToCart = (product) => {
     jsonCart = JSON.stringify(cartItems); //convertir le tableau en json afin de pouvoir l'insérer dans le localStorage
     localStorage.setItem("cart", jsonCart);
   } else {
-    cartItems = JSON.parse(jsonCart);
-    cartItems.push(product);
+    cartItems = JSON.parse(jsonCart);//convertir le tableau en javascript afin de pouvoir lui ajouter le produit sélectionné par l'utilisateur
+    cartItems.push(product); //Ajout dans le tableau, le produit sélectionné par l'utilisateur
     jsonCart = JSON.stringify(cartItems);
     localStorage.setItem("cart", jsonCart);
   }
