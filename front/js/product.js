@@ -21,9 +21,9 @@ let response = fetch(`http://localhost:3000/api/products/${id}`)
     ${data.price}`;
     document.getElementById("description").innerHTML = `
     ${data.description}`;
-    const colorSelect = document.getElementById("colors");
+    const colors = document.getElementById("colors");
     for (color of data.colors) {
-      colorSelect.innerHTML += `
+      colors.innerHTML += `
         <option value=${color}>${color}</option>`;
     }
     //Bouton "Ajouter au panier"
@@ -31,17 +31,23 @@ let response = fetch(`http://localhost:3000/api/products/${id}`)
 
     // Evenement au clique du bouton "Ajouter au panier"
     addToCart.addEventListener("click", () => {
-        console.log(data);
-        console.log(data.colors);
-        data.colors = colors.value;
-        console.log(data.colors);
-        addProductToCart(data);
-        console.log(data);
+      addProductToCart(data);
     });
   });
 
 //La fonction qui gère l'ajout au panier
 const addProductToCart = (product) => {
+  product.selectedColor = colors.value;
+  console.log(product);
+  console.log(product.selectedColor);
+  if (product.selectedColor == "") {
+    return alert("Veuillez choisir une couleur");
+  }
+  let quantity = parseInt(document.getElementById("quantity").value);
+  product["quantity"] = quantity;
+  if (quantity <= 0) {
+    return alert("Veuillez renseigner une quantité supérieure à zéro");
+  }
   jsonCart = localStorage.getItem("cart");
   if (jsonCart == null) {
     let cartItems = []; //Panier
@@ -49,8 +55,18 @@ const addProductToCart = (product) => {
     jsonCart = JSON.stringify(cartItems); //convertir le tableau en json afin de pouvoir l'insérer dans le localStorage
     localStorage.setItem("cart", jsonCart);
   } else {
-    cartItems = JSON.parse(jsonCart);//convertir le tableau en javascript afin de pouvoir lui ajouter le produit sélectionné par l'utilisateur
-    cartItems.push(product); //Ajout dans le tableau, le produit sélectionné par l'utilisateur
+    cartItems = JSON.parse(jsonCart); //convertir le tableau en javascript afin de pouvoir lui ajouter le produit sélectionné par l'utilisateur
+    const hasColor = cartItems.filter(
+        (x) =>
+          x._id === product._id && x.selectedColor === product.selectedColor
+      )
+      console.log(cartItems);
+    if (hasColor && hasColor.length) {
+      hasColor[0].quantity += quantity;
+    } else {
+      cartItems.push(product); //Ajout dans le tableau, le produit sélectionné par l'utilisateur
+      console.log(cartItems);
+    }
     jsonCart = JSON.stringify(cartItems);
     localStorage.setItem("cart", jsonCart);
   }

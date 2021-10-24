@@ -59,6 +59,6 @@ const data = await getProducts();
         <p class="productDescription">${product.description}</p>
     </article>
   </a>`
-  );
+  ).join("");
 };
 displayProducts();
