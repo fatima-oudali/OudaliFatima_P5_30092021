@@ -1,9 +1,7 @@
 //Récupération de la chaine de requête dans l'url
-const queryString_url_id = window.location.search;
-
 //méthode pour extraire l'id
-const urlSearchParams = new URLSearchParams(queryString_url_id);
-const id = urlSearchParams.get("id");
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
 
 //Affichage du produit qui a été sélectionné par l'id
 
