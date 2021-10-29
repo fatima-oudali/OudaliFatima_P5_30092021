@@ -1,8 +1,8 @@
-// console.log(JSON.parse(localStorage.cart));
-let cart = JSON.parse(localStorage.cart);
+const cart = JSON.parse(localStorage.cart);
 // console.log(cart);
+// let cart = localStorage.getItem("cart");
 const cartItems = document.getElementById("cart__items");
-// console.log(cartItems);
+console.log(cartItems);
 let totalQuantity = document.getElementById("totalQuantity");
 console.log(totalQuantity);
 let totalPrice = document.getElementById("totalPrice");
@@ -10,9 +10,11 @@ let articles = 0;
 let total = 0;
 
 cartItems.innerHTML = cart
+
   .map((product) => {
-    articles += product.quantity;
+    articles += parseInt(product.quantity);
     totalQuantity.innerHTML = articles;
+    console.log(articles);
     total += product.price * product.quantity;
     console.log(total);
     totalPrice.innerHTML = total;
@@ -52,11 +54,6 @@ cartItems.innerHTML = cart
 
 // Supprimer un produit du panier
 const deletProduct = (productId, productColor) => {
-  //Avec la méthode filter je sélectionne les éléments à garder et je supprime l'élément où le btn suppr a été cliqué
-  // cart = cart.filter(
-  //   (item) => item._id != productId && item.selectedColor != productColor
-  // );
-  // localStorage.setItem("cart", JSON.stringify(cart));
 
   cart.splice(
     cart.findIndex(
@@ -71,11 +68,13 @@ const deletProduct = (productId, productColor) => {
 
 //Changer la quantité des produits dans le panier
 const changeQuantity = (e, productId, productColor) => {
+  e.preventDefault();
   console.log(e.target.value);
   for (i of cart) {
     if (i._id === productId && i.selectedColor === productColor) {
       i.quantity = e.target.value;
     }
+    
   }
 
   localStorage.setItem("cart", JSON.stringify(cart));
@@ -171,10 +170,9 @@ const validateEmail = (value) => {
   }
 };
 
-const order = document.getElementById("order");
-console.log(order);
+const form = document.querySelector(".cart__order__form");
 
-order.addEventListener("submit", (e) => {
+form.addEventListener("submit", (e) => {
   validateOnSend(e);
 });
 
