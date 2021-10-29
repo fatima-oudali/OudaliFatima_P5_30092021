@@ -217,19 +217,8 @@ console.log(storage);
     .then((res) => res.json())
     .then((res) => {
       window.location.replace(`./confirmation.html?id=${res.orderId}`);
+      window.location.replace(`./html/confirmation.html?id=${res.orderId}`);
     })
     .catch((error) => console.log(error));
 };
 
-//Confirmation de la commande
-
-const orderDiv = document.getElementById("orderId");
-
-const params = new URLSearchParams(window.location.search);
-const orderId = params.get("id");
-console.log(orderId);
-
-if (orderId) {
-  orderDiv.innerHTML = orderId;
-  storage.clear();
-}
