@@ -200,8 +200,8 @@ const validateOnSend = (event) => {
 };
 
 const sendOrder = (contact) => {
-const storage = window.localStorage;
-console.log(storage);
+  const storage = window.localStorage;
+  console.log(storage);
   const products = cart.map((x) => x._id);
 
   const data = {
@@ -217,8 +217,6 @@ console.log(storage);
     .then((res) => res.json())
     .then((res) => {
       window.location.replace(`./confirmation.html?id=${res.orderId}`);
-      window.location.replace(`./html/confirmation.html?id=${res.orderId}`);
     })
     .catch((error) => console.log(error));
 };
-
