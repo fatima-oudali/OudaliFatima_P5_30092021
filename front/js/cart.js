@@ -1,24 +1,28 @@
+//Page panier
+
+//Récupération du panier(tableau) via le localStorage
 const cart = JSON.parse(localStorage.cart);
-// console.log(cart);
-// let cart = localStorage.getItem("cart");
+
 const cartItems = document.getElementById("cart__items");
-console.log(cartItems);
 let totalQuantity = document.getElementById("totalQuantity");
-console.log(totalQuantity);
 let totalPrice = document.getElementById("totalPrice");
 let articles = 0;
 let total = 0;
 
+//Parcourir le tableau 
 cartItems.innerHTML = cart
-
   .map((product) => {
+    //Créer et insérer le nombre d'articles dans la page panier
     articles += parseInt(product.quantity);
     totalQuantity.innerHTML = articles;
     console.log(articles);
+
+    //Créer et insérer le prix total dans la page panier
     total += product.price * product.quantity;
     console.log(total);
     totalPrice.innerHTML = total;
 
+    // Affichage d'un tableau récapitulatif des achats dans la page panier
     return `
     <article class="cart__item" data-id="${product._id}">
     <div class="cart__item__img">
@@ -54,7 +58,7 @@ cartItems.innerHTML = cart
 
 // Supprimer un produit du panier
 const deletProduct = (productId, productColor) => {
-
+  //Cibler l'id et la couleur du produit à suuprimer
   cart.splice(
     cart.findIndex(
       (item) => item._id === productId && item.selectedColor === productColor
@@ -66,15 +70,16 @@ const deletProduct = (productId, productColor) => {
   location.reload();
 };
 
-//Changer la quantité des produits dans le panier
+
+//Observer le changement de quantité des produits dans le panier
 const changeQuantity = (e, productId, productColor) => {
   e.preventDefault();
   console.log(e.target.value);
+  //Cibler l'id et la couleur du produit à modifier
   for (i of cart) {
     if (i._id === productId && i.selectedColor === productColor) {
       i.quantity = e.target.value;
     }
-    
   }
 
   localStorage.setItem("cart", JSON.stringify(cart));
@@ -82,8 +87,8 @@ const changeQuantity = (e, productId, productColor) => {
 };
 
 //LE FORMULAIRE
-//Vérification de la validation des valeurs des inputs--- La valeur de l'input doit correspondre à son type
-
+//Récupérer et analyser les données saisies par l'utilisateur dans le formulaire
+//Afficher un message d'erreur si besoin
 const validateForm = () => {
   const firstName = document.getElementById("firstName");
   const lastName = document.getElementById("lastName");
@@ -178,6 +183,7 @@ form.addEventListener("submit", (e) => {
 
 const validateOnSend = (event) => {
   event.preventDefault();
+  //Constitution d'un objet contact à partir des données du formulaire
   const firstName = document.getElementById("firstName").value;
   const lastName = document.getElementById("lastName").value;
   const address = document.getElementById("address").value;
@@ -200,6 +206,7 @@ const validateOnSend = (event) => {
 const sendOrder = (contact) => {
   const storage = window.localStorage;
   console.log(storage);
+  //Constitution d'un tableau de produits
   const products = cart.map((x) => x._id);
 
   const data = {
@@ -207,6 +214,8 @@ const sendOrder = (contact) => {
     products,
   };
   console.log(data);
+
+  //requête POST sur l'API et récupération de l'id de commande dans la réponse de celle-ci
   fetch("http://localhost:3000/api/products/order", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -214,7 +223,8 @@ const sendOrder = (contact) => {
   })
     .then((res) => res.json())
     .then((res) => {
-      window.location.replace(`./confirmation.html?id=${res.orderId}`);
+      //rediriger l'utilisateur sur la page de confirmation, en passant l'id de commande dans l'URL afin d'afficher le numéro de commande
+      window.location.replace(`./confirmation.html?id=${res.orderId}`); 
     })
     .catch((error) => console.log(error));
 };
