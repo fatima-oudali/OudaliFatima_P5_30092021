@@ -68,6 +68,7 @@ const deletProduct = (productId, productColor) => {
   console.log(cart);
   localStorage.setItem("cart", JSON.stringify(cart));
   location.reload();
+  alert("Votre produit est bien supprimé")
 };
 
 

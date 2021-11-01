@@ -89,4 +89,5 @@ const addProductToCart = (product) => {
     jsonCart = JSON.stringify(cartItems);
     localStorage.setItem("cart", jsonCart);
   }
+  alert("Le produit a bien été ajouté à votre panier")
 };
